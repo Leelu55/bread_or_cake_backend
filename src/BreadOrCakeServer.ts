@@ -41,6 +41,16 @@ export class BreadOrCakeServer {
       //   return res.status(error.statusCode).json(error)
       // }
       console.log(req.body.ingredients)
+      const breadOrCakeRule =
+        'If the ratio of added fat and/or added sugars to grain \
+      products and/or starches is at least 10 parts to 90 parts, \
+      and the item is made by baking, roasting, drying, cooking extrusion, \
+      or other processes, it is classified as cake \
+      In contrast, if the item is made entirely or partially from grains and/or grain products\
+      , as well as other foods (e.g., legumes, potato products), \
+      by kneading, shaping, leavening, baking, or hot extrusion of the dough, \
+      and contains less than 10 weight percent of fat and/or \
+      sugars to 90 weight percent of grains and/or grain products, it is classified as bread.'
       const completion = await openai.chat.completions.create({
         messages: [
           {
@@ -48,8 +58,11 @@ export class BreadOrCakeServer {
             content:
               'You are a helpful assistant trying to distinguish between bread and cake receipts. \
               Provided a list of ingredients, you should tell if it is a bread or cake receipt. \
-              Return a {"isA": "bread"} or  {"isA": "cake"}. \
-              here are the ingredients: ' + req.body.ingredients,
+              Return only and exclusively a {"isA": "bread"} or  {"isA": "cake"}. \
+              here are the ingredients: ' +
+              req.body.ingredients +
+              'and the rule is:' +
+              breadOrCakeRule,
           },
         ],
         model: 'gpt-3.5-turbo',
