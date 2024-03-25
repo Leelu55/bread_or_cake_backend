@@ -1,0 +1,34 @@
+{
+  "info": {
+    "_postman_id": "5d6629a7-4561-4e1b-80f5-7b0365b75c01",
+    "name": "Bread or Cake API",
+    "description": "Collection for testing the bread or cake determination API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Determine Bread or Cake",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"ingredients\": \"flour, sugar, eggs\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/bread-or-cake",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["bread-or-cake"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
