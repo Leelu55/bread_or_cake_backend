@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser'
+import cors from 'cors' // Import the cors package
 import express, { Request, Response } from 'express'
 import { ApiError, BreadOrCakeRequest, BreadOrCakeResponse } from './types'
 
@@ -11,6 +12,8 @@ export class BreadOrCakeServer {
 
     // Middleware to parse JSON bodies
     this.app.use(bodyParser.json())
+
+    this.app.use(cors())
 
     // Define routes
     this.app.post('/bread-or-cake', this.handleBreadOrCakeRequest.bind(this))
@@ -34,6 +37,9 @@ export class BreadOrCakeServer {
       const result: BreadOrCakeResponse = {
         result: Math.random() > 0.5 ? "It's bread" : "It's cake",
       }
+      console.log(
+        `Ingredients: ${req.body.ingredients}, Result: ${result.result}`,
+      )
       res.status(200).send(result)
     } catch (err) {
       // General error handling
