@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.19.1"
+    "express": "^4.19.1",
+    "openai": "^4.29.2"
   },
   "scripts": {
     "build": "npx tsc",

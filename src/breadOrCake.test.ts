@@ -33,4 +33,16 @@ describe('BreadOrCakeServer', () => {
       message: 'Invalid input. Please provide a string of ingredients.',
     })
   })
+
+  it('should return 400 Bad Request if ingredients are missing', async () => {
+    const response = await request(server['app'])
+      .post('/bread-or-cake-ai')
+      .send({})
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      statusCode: 400,
+      message: 'Invalid input. Please provide a string of ingredients.',
+    })
+  })
 })
