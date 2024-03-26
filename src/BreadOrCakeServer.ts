@@ -2,7 +2,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors' // Import the cors package
 import express, { Request, Response } from 'express'
 import { ApiError, BreadOrCakeRequest, BreadOrCakeResponse } from './types'
-import OpenAI from 'openai'
+import { OpenAI } from 'openai'
 import { ChatCompletionMessage, CompletionChoice } from 'openai/resources'
 
 export class BreadOrCakeServer {
@@ -18,8 +18,6 @@ export class BreadOrCakeServer {
     this.app.use(cors())
 
     // Define routes
-    this.app.post('/bread-or-cake', this.handleBreadOrCakeRequest.bind(this))
-    // Define routes
     this.app.post(
       '/bread-or-cake-ai',
       this.handleBreadOrCakeOpenAiRequest.bind(this),
@@ -32,14 +30,13 @@ export class BreadOrCakeServer {
   ) {
     const openai = new OpenAI()
     try {
-      // Simulate input validation
-      // if (typeof req.body.ingredients !== 'string' || !req.body.ingredients) {
-      //   const error: ApiError = {
-      //     statusCode: 400,
-      //     message: 'Invalid input. Please provide a string of ingredients.',
-      //   }
-      //   return res.status(error.statusCode).json(error)
-      // }
+      if (typeof req.body.ingredients !== 'string' || !req.body.ingredients) {
+        const error: ApiError = {
+          statusCode: 400,
+          message: 'Invalid input. Please provide a string of ingredients.',
+        }
+        return res.status(error.statusCode).json(error)
+      }
       console.log(req.body.ingredients)
       const breadOrCakeRule =
         'If the ratio of added fat and/or added sugars to grain \
@@ -58,7 +55,11 @@ export class BreadOrCakeServer {
             content:
               'You are a helpful assistant trying to distinguish between bread and cake receipts. \
               Provided a list of ingredients, you should tell if it is a bread or cake receipt. \
-              Return only and exclusively a {"isA": "bread"} or  {"isA": "cake"}. \
+              Return only and exclusively either \
+               {"isA": "bread"} or  \
+               {"isA": "cake"}. or \
+               if the input doenst look lake bread or cake : {"isA": "otherRecipe"} or \
+               if the input doesnt look like ingredients at all: {"isA" : "notRecipe"} \
               here are the ingredients: ' +
               req.body.ingredients +
               'and the rule is:' +

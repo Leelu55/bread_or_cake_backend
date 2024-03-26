@@ -1,6 +1,19 @@
 import request from 'supertest'
 import { BreadOrCakeServer } from './BreadOrCakeServer'
 
+// Adjusted mock to reflect the named export
+jest.mock('openai', () => ({
+  OpenAI: jest.fn().mockImplementation(() => ({
+    chat: {
+      completions: {
+        create: jest.fn().mockResolvedValue({
+          choices: [{ message: '{"isA": "bread"}' }], // Adjusted mock response
+        }),
+      },
+    },
+  })),
+}))
+
 describe('BreadOrCakeServer', () => {
   let server: BreadOrCakeServer
 
@@ -15,23 +28,12 @@ describe('BreadOrCakeServer', () => {
 
   it('should return 200 OK with "bread" or "cake"', async () => {
     const response = await request(server['app'])
-      .post('/bread-or-cake')
+      .post('/bread-or-cake-ai')
       .send({ ingredients: 'flour, sugar' })
 
     expect(response.status).toBe(200)
-    expect(response.body.result).toMatch(/^(It's bread|It's cake)$/)
-  })
-
-  it('should return 400 Bad Request if ingredients are missing', async () => {
-    const response = await request(server['app'])
-      .post('/bread-or-cake')
-      .send({})
-
-    expect(response.status).toBe(400)
-    expect(response.body).toEqual({
-      statusCode: 400,
-      message: 'Invalid input. Please provide a string of ingredients.',
-    })
+    // Make sure to adjust this assertion based on how your server processes the response
+    expect(JSON.parse(response.text)).toMatchObject({ isA: 'bread' })
   })
 
   it('should return 400 Bad Request if ingredients are missing', async () => {

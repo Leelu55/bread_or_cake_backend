@@ -11,6 +11,11 @@
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "exclude": [".eslintrc.cjs", "node_modules", "jest.config.js"],
+  "exclude": [
+    ".eslintrc.cjs",
+    "node_modules",
+    "jest.config.js",
+    "**/*.test.ts"
+  ],
   "include": ["src/**/*"]
 }
